@@ -1,12 +1,13 @@
 {{
   config(
-    materialized='view'
+    materialized='incremental',
+    unique_key = 'order_id',
   )
 }}
 
-WITH src_sql_server_dbo AS (
+WITH fct_orders AS (
     SELECT * 
-    FROM {{ source('src_sql_server_dbo', 'orders') }}
+    FROM {{ ref('stg_sql_server_orders') }}
     ),
 
 renamed_casted AS (
@@ -24,8 +25,14 @@ renamed_casted AS (
         , user_id
         , address_id
         , status
-        , _fivetran_synced AS date_load
-    FROM src_sql_server_dbo
+        , date_load
+    FROM fct_orders
     )
 
 SELECT * FROM renamed_casted
+
+{% if is_incremental() %}
+
+  where created_at > (select max(created_at) from {{ this }})
+
+{% endif %}
