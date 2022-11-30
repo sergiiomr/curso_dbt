@@ -22,7 +22,7 @@ sources:
       - name: addresses
         columns:
           - name: address_id
-            description: ""
+            description: "ID de la dirección"
             tests:
               - not_null
               - unique
@@ -37,26 +37,26 @@ sources:
             tests:
               - not_null
           - name: country
-            description: ""
+            description: "CIUDAD"
             tests:
               - not_null
           - name: address
-            description: ""
+            description: "DIRECCIÓN"
             tests:
               - not_null
           - name: state
-            description: ""
+            description: "ESTADO"
             tests:
               - not_null
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: order_items
         columns:
           - name: order_id
-            description: ""
+            description: "ID del pedido"
             tests:
               - not_null
               - unique
@@ -67,21 +67,21 @@ sources:
                   to: source('src_sql_server_dbo','products')
                   field: product_id
           - name: product_id
-            description: ""
+            description: "ID del producto"
           - name: quantity
-            description: ""
+            description: "CANTIDAD"
             tests:
               - positive_values
               - not_null
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: orders
         columns:
           - name: order_id
-            description: ""
+            description: "ID del pedido"
             tests:
               - not_null
               - unique
@@ -101,42 +101,42 @@ sources:
                   to: source('src_sql_server_dbo','events')
                   field: order_id
           - name: shipping_service
-            description: ""
+            description: "Servicio de envío"
           - name: shipping_cost
-            description: ""
+            description: "Coste del envío"
           - name: address_id
-            description: ""
+            description: "ID de la dirección"
             tests:
               - not_null
           - name: created_at
-            description: ""
+            description: "Fecha de creación"
           - name: promo_id
-            description: ""
+            description: "ID de la promoción"
           - name: estimated_delivery_at
-            description: ""
+            description: "Estimación fecha de entrega"
           - name: order_cost
-            description: ""
+            description: "Coste del pedido"
           - name: user_id
-            description: ""
+            description: "ID del usuario"
             tests:
               - not_null
           - name: order_total
-            description: ""
+            description: "Pedido total"
           - name: delivered_at
-            description: ""
+            description: "Fecha de entregado"
           - name: tracking_id
-            description: ""
+            description: "ID del seguimiento"
           - name: status
-            description: ""
+            description: "ESTADO"
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: products
         columns:
           - name: product_id
-            description: ""
+            description: "ID del producto"
             tests:
               - not_null
               - unique
@@ -147,20 +147,20 @@ sources:
                   to: source('src_sql_server_dbo','events')
                   field: product_id
           - name: price
-            description: ""
+            description: "PRECIO"
           - name: name
-            description: ""
+            description: "NOMBRE"
           - name: inventory
-            description: ""
+            description: "INVENTARIO"
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: promos
         columns:
           - name: promo_id
-            description: ""
+            description: "ID de la promoción"
             tests:
               - not_null
               - unique
@@ -168,18 +168,18 @@ sources:
                   to: source('src_sql_server_dbo','orders')
                   field: promo_id
           - name: discount
-            description: ""
+            description: "DESCUENTO"
           - name: status
-            description: ""
+            description: "ESTADO"
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: users
         columns:
           - name: user_id
-            description: ""
+            description: "ID del usuario"
             tests:
               - not_null
               - unique
@@ -193,34 +193,34 @@ sources:
                   to: source('src_sql_server_dbo','addresses')
                   field: address_id
           - name: updated_at
-            description: ""
+            description: "Actualizado"
           - name: address_id
-            description: ""
+            description: "DESCRIPCIÓN"
             tests:
               - not_null
           - name: last_name
-            description: ""
+            description: "APELLIDO"
           - name: created_at
-            description: ""
+            description: "CREADO"
           - name: phone_number
-            description: ""
+            description: "Número de teléfono"
           - name: total_orders
-            description: ""
+            description: "Pedidos totales"
           - name: first_name
-            description: ""
+            description: "NOMBRE"
           - name: email
-            description: ""
+            description: "Correo electrónico"
             tests:
               - not_null
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
 
       - name: events
         columns:
           - name: event_id
-            description: ""
+            description: "ID de evento"
             tests:
               - not_null
               - unique
@@ -234,20 +234,20 @@ sources:
                   to: source('src_sql_server_dbo','orders')
                   field: order_id
           - name: product_id
-            description: ""
+            description: "ID del producto"
           - name: page_url
-            description: ""
+            description: "URL de la página"
           - name: event_type
-            description: ""
+            description: "Tipo de evento"
           - name: order_id
-            description: ""
+            description: "ID del pedido"
           - name: session_id
-            description: ""
+            description: "ID de la sesión"
           - name: user_id
-            description: ""
+            description: "ID del usuario"
           - name: created_at
-            description: ""
+            description: "CREADO"
           - name: _fivetran_deleted
-            description: ""
+            description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
-            description: ""
+            description: "FIVETRAN CARGA"
