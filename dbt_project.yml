@@ -40,7 +40,7 @@ models:
       +database: |  
         {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno19
         {%- elif target.name == 'ci' -%} dev_silver_db_alumno19
-        {%- elif target.name == 'pro'-%} pro_silver_db_alumno19
+        {%- elif target.name == 'pro'-%} pro_silver_db_alumno19  
         {%- else -%} {{target.database}}_silver_db_alumno19
         {%- endif -%}
       google_sheets:
@@ -51,10 +51,10 @@ models:
     marts:
       +materialized: table
       +database: |  
-        {%- if  target.name == 'user_dev' -%} dev_gold_db_alumno19
-        {%- elif target.name == 'ci' -%} dev_gold_db_alumno19 
-        {%- elif target.name == 'pro'-%} pro_gold_db_alumno19 
-        {%- else -%} {{target.database}}_gold_db_alumno_19
+        {%- if  target.name == 'user_dev' -%} dev_gold_db_alumno19  
+        {%- elif target.name == 'ci' -%} dev_gold_db_alumno19
+        {%- elif target.name == 'pro'-%} pro_gold_db_alumno19
+        {%- else -%} {{target.database}}_gold_db_alumno19
         {%- endif -%}
       core:
         +schema: core
@@ -65,8 +65,7 @@ snapshots:
   +target_database: |  
         {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno19
         {%- elif target.name == 'ci' -%} dev_silver_db_alumno19
-        {%- elif target.name == 'pro'-%} pro_silver_db_alumno19
-        {%- else -%} {{target.database}}_silver_db_alumno_19
+        {%- elif target.name == 'pro'-%} pro_silver_db_alumno19  
+        {%- else -%} {{target.database}}_silver_db_alumno19
         {%- endif -%}
   +target_schema: snapshots
-
