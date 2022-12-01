@@ -5,7 +5,7 @@
   )
 }}
 
-WITH fct_orders AS (
+WITH fct_events AS (
     SELECT * 
     FROM {{ ref('stg_sql_server_events') }}
     ),

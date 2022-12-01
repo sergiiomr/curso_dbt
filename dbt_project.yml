@@ -41,7 +41,7 @@ models:
         {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno19
         {%- elif target.name == 'ci' -%} dev_silver_db_alumno19
         {%- elif target.name == 'pro'-%} pro_silver_db_alumno19
-        {%- else -%} {{target.database}}_silver_db_alumno22
+        {%- else -%} {{target.database}}_silver_db_alumno19
         {%- endif -%}
       google_sheets:
         +schema: google_sheets
