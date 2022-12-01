@@ -4,10 +4,10 @@ sources:
 
   - name: src_sql_server_dbo # Name of the source, this name will be used to reference the {{ source ('','') }} function.
     description: >
-      Raw data demo from Budget.
+      "Datos en bronze"
     schema: sql_server_dbo # This is the schema our raw data lives in snowflake.
     database: |  
-        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno19
+        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno19 
         {%- elif target.name == 'ci' -%} dev_bronze_db_alumno19
         {%- elif target.name == 'pro'-%} pro_bronze_db_alumno19  
         {%- else -%} {{target.database}}_bronze_db_alumno19
@@ -26,14 +26,8 @@ sources:
             tests:
               - not_null
               - unique
-              - relationships:
-                  to: source('src_sql_server_dbo','orders')
-                  field: address_id
-              - relationships:
-                  to: source('src_sql_server_dbo','users')
-                  field: address_id
           - name: zipcode
-            description: ""
+            description: "CÓDIGO POSTAL"
             tests:
               - not_null
           - name: country
@@ -56,22 +50,22 @@ sources:
       - name: order_items
         columns:
           - name: order_id
-            description: "ID del pedido"
+            description: "ID de pedidos"
             tests:
               - not_null
-              - unique
               - relationships:
                   to: source('src_sql_server_dbo','orders')
                   field: order_id
+          - name: product_id
+            description: "ID de pedido"
+            tests:
+              - not_null
               - relationships:
                   to: source('src_sql_server_dbo','products')
                   field: product_id
-          - name: product_id
-            description: "ID del producto"
           - name: quantity
             description: "CANTIDAD"
             tests:
-              - positive_values
               - not_null
           - name: _fivetran_deleted
             description: "FIVETRAN BORRADO"
@@ -81,51 +75,56 @@ sources:
       - name: orders
         columns:
           - name: order_id
-            description: "ID del pedido"
+            description: "ID de pedido"
             tests:
               - not_null
               - unique
               - relationships:
                   to: source('src_sql_server_dbo','order_items')
+                  field: order_id 
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','events')
                   field: order_id
-              - relationships:
+                  where: order_id <> null
+          - name: shipping_service
+            description: "EMPRESA DE ENVÍO"
+          - name: shipping_cost
+            description: "COSTE DE ENVÍO"
+          - name: address_id
+            description: "ID de envío"
+            tests:
+              - not_null 
+              - dbt_utils.relationships_where:
                   to: source('src_sql_server_dbo','addresses')
                   field: address_id
+                  where: address_id <> null
+          - name: created_at
+            description: "FECHA PEDIDO"
+          - name: promo_id
+            description: "ID promoción"
+            test:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','promos')
+                  field: promo_id
+                  where: promo_id <> null
+          - name: estimated_delivery_at
+            description: "FECHA ESTIMADA DE ENTREGA"
+          - name: order_cost
+            description: " COSTE DEL PEDIDO"
+          - name: user_id
+            description: "ID de usuario"
+            tests:
+              - not_null
               - relationships:
                   to: source('src_sql_server_dbo','users')
                   field: user_id
-              - relationships:
-                  to: source('src_sql_server_dbo','promos')
-                  field: promo_id
-              - relationships:
-                  to: source('src_sql_server_dbo','events')
-                  field: order_id
-          - name: shipping_service
-            description: "Servicio de envío"
-          - name: shipping_cost
-            description: "Coste del envío"
-          - name: address_id
-            description: "ID de la dirección"
-            tests:
-              - not_null
-          - name: created_at
-            description: "Fecha de creación"
-          - name: promo_id
-            description: "ID de la promoción"
-          - name: estimated_delivery_at
-            description: "Estimación fecha de entrega"
-          - name: order_cost
-            description: "Coste del pedido"
-          - name: user_id
-            description: "ID del usuario"
-            tests:
-              - not_null
           - name: order_total
-            description: "Pedido total"
+            description: "COSTE TOTAL DEL PEDIDO"
           - name: delivered_at
-            description: "Fecha de entregado"
+            description: "FECHA ENTREGA"
           - name: tracking_id
-            description: "ID del seguimiento"
+            description: "IDENTIFICADOR"
           - name: status
             description: "ESTADO"
           - name: _fivetran_deleted
@@ -140,12 +139,6 @@ sources:
             tests:
               - not_null
               - unique
-              - relationships:
-                  to: source('src_sql_server_dbo','order_items')
-                  field: product_id
-              - relationships:
-                  to: source('src_sql_server_dbo','events')
-                  field: product_id
           - name: price
             description: "PRECIO"
           - name: name
@@ -160,17 +153,14 @@ sources:
       - name: promos
         columns:
           - name: promo_id
-            description: "ID de la promoción"
+            description: "ID del pedido"
             tests:
               - not_null
               - unique
-              - relationships:
-                  to: source('src_sql_server_dbo','orders')
-                  field: promo_id
           - name: discount
             description: "DESCUENTO"
           - name: status
-            description: "ESTADO"
+            description: "ESTADO PROMO"
           - name: _fivetran_deleted
             description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
@@ -179,37 +169,28 @@ sources:
       - name: users
         columns:
           - name: user_id
-            description: "ID del usuario"
+            description: "ID de usuario"
             tests:
               - not_null
               - unique
-              - relationships:
-                  to: source('src_sql_server_dbo','events')
-                  field: user_id
-              - relationships:
-                  to: source('src_sql_server_dbo','orders')
-                  field: user_id
-              - relationships:
-                  to: source('src_sql_server_dbo','addresses')
-                  field: address_id
           - name: updated_at
-            description: "Actualizado"
+            description: "MODIFICACIÓN"
           - name: address_id
-            description: "DESCRIPCIÓN"
+            description: "ID de dirección"
             tests:
               - not_null
           - name: last_name
             description: "APELLIDO"
           - name: created_at
-            description: "CREADO"
+            description: "FECHA CREACIÓN"
           - name: phone_number
-            description: "Número de teléfono"
+            description: "NÚMERO TELEFONO"
           - name: total_orders
-            description: "Pedidos totales"
+            description: "TOTAL PEDIDOA"
           - name: first_name
             description: "NOMBRE"
           - name: email
-            description: "Correo electrónico"
+            description: "EMAIL"
             tests:
               - not_null
           - name: _fivetran_deleted
@@ -220,34 +201,42 @@ sources:
       - name: events
         columns:
           - name: event_id
-            description: "ID de evento"
-            tests:
-              - not_null
-              - unique
-              - relationships:
-                  to: source('src_sql_server_dbo','products')
-                  field: product_id
-              - relationships:
-                  to: source('src_sql_server_dbo','users')
-                  field: user_id
-              - relationships:
-                  to: source('src_sql_server_dbo','orders')
-                  field: order_id
+            description: "ID del evento"
           - name: product_id
             description: "ID del producto"
+            tests:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','products')
+                  field: product_id
+                  where: product_id <> null
           - name: page_url
-            description: "URL de la página"
+            description: "WEB"
           - name: event_type
-            description: "Tipo de evento"
+            description: "TIPO EVENTO"
           - name: order_id
             description: "ID del pedido"
+            tests:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','orders')
+                  field: order_id
+                  where: order_id <> null
           - name: session_id
             description: "ID de la sesión"
           - name: user_id
-            description: "ID del usuario"
+            description: "ID de usuario"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('src_sql_server_dbo','users')
+                  field: user_id
           - name: created_at
-            description: "CREADO"
+            description: "FECHA CREACIÓN"
           - name: _fivetran_deleted
             description: "FIVETRAN BORRADO"
           - name: _fivetran_synced
             description: "FIVETRAN CARGA"
+
+
+            

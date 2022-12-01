@@ -7,7 +7,7 @@
 
 WITH dim_addresses AS (
     SELECT * 
-    FROM {{ source('stg_sql_server_addresses', ) }}
+    FROM {{ ref('stg_sql_server_addresses', ) }}
     ),
 
 renamed_casted AS (
