@@ -11,8 +11,8 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          order_id
-        , product_id
+          order_id as ID_Pedido
+        , product_id as ID_Producto
         , quantity
         , _fivetran_synced AS date_load
     FROM src_sql_server_dbo

@@ -11,11 +11,11 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          address_id
-        , zipcode
-        , country
-        , address 
-        , state
+          address_id as ID_Direccion
+        , zipcode as Codigo_Postal
+        , country as Ciudad
+        , address  as Direccion
+        , state as Estado
         , _fivetran_synced AS date_load
     FROM src_sql_server_dbo
     )

@@ -11,15 +11,15 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          user_id
-        , address_id
+          user_id as ID_Usuario
+        , address_id as ID_Direccion
         , first_name as Nombre
-        , created_at
-        , total_orders
+        , created_at as Fecha_Creacion
+        , total_orders as Total_Pedidos
         , last_name as Apellido
-        , updated_at
-        , phone_number as TLF
-        , email
+        , updated_at as Fecha_Modificacion
+        , phone_number as Numero_telefono
+        , email as Correo_Electronico
         , _fivetran_synced AS date_load
     FROM src_sql_server_dbo
     )
