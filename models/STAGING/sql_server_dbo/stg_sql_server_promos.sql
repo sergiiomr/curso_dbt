@@ -13,7 +13,7 @@ renamed_casted AS (
     SELECT
           promo_id
         , status as Estado
-        , discount as Desuento
+        , discount as Descuento
         , _fivetran_synced AS date_load
     FROM src_sql_server_dbo
     )

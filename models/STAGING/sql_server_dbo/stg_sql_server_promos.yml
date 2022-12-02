@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_sql_server_promos
+    description: "Tabla dimension PROMOS"
+    columns:
+      - name: promo_id
+        description: "ID de la promoción"
+
+      - name: estado
+        description: "Estado de la promoción"
+
+      - name: descuento
+        description: "Descuento"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"

@@ -14,7 +14,7 @@ renamed_casted AS (
     SELECT
           promo_id
         , Estado
-        , Desuento
+        , Descuento
         , date_load
     FROM dim_promos
     )
