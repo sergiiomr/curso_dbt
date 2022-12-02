@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='incremental',
+    materialized='table',
     unique_key = 'order_id',
   )
 }}
@@ -13,26 +13,21 @@ WITH fct_orders AS (
 renamed_casted AS (
     SELECT
           order_id
-        , delivered_at
-        , tracking_id
-        , order_cost
-        , shipping_service
-        , shipping_cost
-        , created_at
-        , estimated_delivery_at
-        , order_total
-        , promo_id
-        , user_id
-        , address_id
-        , status
+        , Entregado
+        , ID_seguimiento
+        , Coste_Pedido
+        , Empresa_de_Envio
+        , Coste_Envio
+        , Creado
+        , Fecha_Estimada_Entrega
+        , Pedido_Total
+        , ID_Promo
+        , ID_Usuario
+        , ID_Direccion
+        , Estado
         , date_load
     FROM fct_orders
     )
 
 SELECT * FROM renamed_casted
 
-{% if is_incremental() %}
-
-  where created_at > (select max(created_at) from {{ this }})
-
-{% endif %}

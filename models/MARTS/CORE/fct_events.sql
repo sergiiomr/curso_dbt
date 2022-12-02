@@ -1,7 +1,7 @@
 {{
   config(
-    materialized='incremental',
-    unique_key = 'event_id',
+    materialized='table',
+    unique_key = 'ID_Evento',
   )
 }}
 
@@ -12,22 +12,17 @@ WITH fct_events AS (
 
 renamed_casted AS (
     SELECT
-          event_id
-        , product_id
-        , page_url
-        , event_type
-        , order_id
-        , session_id
-        , user_id
-        , created_at
+          ID_Evento
+        , ID_Producto
+        , URL
+        , Tipo_Evento
+        , ID_Pedido
+        , ID_sesion
+        , ID_Usuario
+        , Creado
         , date_load
     FROM fct_events
     )
 
 SELECT * FROM renamed_casted
 
-{% if is_incremental() %}
-
-  where created_at > (select max(created_at) from {{ this }})
-
-{% endif %}

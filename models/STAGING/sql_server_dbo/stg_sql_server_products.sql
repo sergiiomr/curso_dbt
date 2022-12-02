@@ -11,7 +11,7 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          product_id as ID_Producto
+          product_id
         , price as Precio
         , INVENTORY as Inventario
         , name as Nombre

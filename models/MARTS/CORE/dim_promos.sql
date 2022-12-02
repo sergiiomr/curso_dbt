@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='incremental',
+    materialized='table',
     unique_key = 'promo_id'
   )
 }}
@@ -13,16 +13,11 @@ WITH dim_promos AS (
 renamed_casted AS (
     SELECT
           promo_id
-        , status
-        , discount
+        , Estado
+        , Desuento
         , date_load
     FROM dim_promos
     )
 
 select * from renamed_casted
 
-{% if is_incremental() %}
-
-  where date_load > (select max(date_load) from {{ this }})
-
-{% endif %}

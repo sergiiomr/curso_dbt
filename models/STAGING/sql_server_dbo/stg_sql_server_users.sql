@@ -11,7 +11,7 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          user_id as ID_Usuario
+          user_id
         , address_id as ID_Direccion
         , first_name as Nombre
         , created_at as Fecha_Creacion

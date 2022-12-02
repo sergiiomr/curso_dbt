@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='incremental',
+    materialized='table',
     unique_key = 'user_id'
   )
 }}
@@ -13,22 +13,17 @@ WITH dim_users AS (
 renamed_casted AS (
     SELECT
           user_id
-        , address_id
+        , ID_Direccion
         , Nombre
-        , created_at
-        , total_orders
+        , Fecha_Creacion
+        , Total_Pedidos
         , Apellido
-        , updated_at
-        , TLF
-        , email
+        , Fecha_Modificacion
+        , Numero_telefono
+        , Correo_Electronico
         , date_load
     FROM dim_users
     )
 
 select * from renamed_casted
 
-{% if is_incremental() %}
-
-  where created_at > (select max(created_at) from {{ this }})
-
-{% endif %}

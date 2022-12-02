@@ -11,7 +11,7 @@ WITH src_sql_server_dbo AS (
 
 renamed_casted AS (
     SELECT
-          promo_id as ID_Promo
+          promo_id
         , status as Estado
         , discount as Desuento
         , _fivetran_synced AS date_load
