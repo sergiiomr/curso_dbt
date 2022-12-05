@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_sql_server_events
+    description: "Tabla dimension EVENTS"
+    columns:
+      - name: id_evento
+        description: "ID de evento"
+
+      - name: id_producto
+        description: "ID de porducto"
+
+      - name: url
+        description: "Enlace"
+
+      - name: tipo_evento
+        description: "Tipo de Evento"
+
+      - name: id_pedido
+        description: "ID de Pedido"
+
+      - name: id_sesion
+        description: "ID de Sesión"
+
+      - name: id_usuario
+        description: "ID de Usuario"
+
+      - name: creado
+        description: "Fecha de Creación"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_sql_server_addresses
+    description: "Tabla dimension ADDRESSES"
+    columns:
+      - name: address_id
+        description: "ID de address"
+        tests:
+          - not_null
+          - unique
+
+      - name: codigo_postal
+        description: "Código postal"
+
+      - name: ciudad
+        description: "Ciudad"
+
+      - name: direccion
+        description: "Dirección"
+
+      - name: estado
+        description: "Estado"
+
+      - name: date_load
+        description: "Carga FIVETRAN"
+
+        version: 2
+

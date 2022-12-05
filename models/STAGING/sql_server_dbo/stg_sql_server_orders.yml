@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: stg_sql_server_orders
+    description: "Tabla dimension ORDERS"
+    columns:
+      - name: order_id
+        description: "ID de pedido"
+
+      - name: entregado
+        description: "Entregado"
+
+      - name: id_seguimiento
+        description: "ID de seguimiento"
+
+      - name: coste_pedido
+        description: "Coste del pedido"
+
+      - name: empresa_de_envio
+        description: "Empresa responsable del envío"
+
+      - name: coste_envio
+        description: "Coste del envío"
+
+      - name: creado
+        description: "Fecha de creación"
+
+      - name: fecha_estimada_entrega
+        description: "Fecha estimada de entrega"
+
+      - name: pedido_total
+        description: "Pedido total"
+
+      - name: id_promo
+        description: "ID de la promoción"
+
+      - name: id_usuario
+        description: "ID del usuario"
+
+      - name: id_direccion
+        description: "ID de la dirección"
+
+      - name: estado
+        description: "Estado del pedido"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"

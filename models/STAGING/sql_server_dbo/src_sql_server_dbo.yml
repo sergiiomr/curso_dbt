@@ -1,0 +1,242 @@
+version: 2
+
+sources:
+
+  - name: src_sql_server_dbo # Name of the source, this name will be used to reference the {{ source ('','') }} function.
+    description: >
+      "Datos en bronze"
+    schema: sql_server_dbo # This is the schema our raw data lives in snowflake.
+    database: |  
+        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno19 
+        {%- elif target.name == 'ci' -%} dev_bronze_db_alumno19
+        {%- elif target.name == 'pro'-%} pro_bronze_db_alumno19  
+        {%- else -%} {{target.database}}_bronze_db_alumno19
+        {%- endif -%}
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+
+    tables:
+      - name: addresses
+        columns:
+          - name: address_id
+            description: "ID de la dirección"
+            tests:
+              - not_null
+              - unique
+          - name: zipcode
+            description: "CÓDIGO POSTAL"
+            tests:
+              - not_null
+          - name: country
+            description: "CIUDAD"
+            tests:
+              - not_null
+          - name: address
+            description: "DIRECCIÓN"
+            tests:
+              - not_null
+          - name: state
+            description: "ESTADO"
+            tests:
+              - not_null
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: order_items
+        columns:
+          - name: order_id
+            description: "ID de pedidos"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('src_sql_server_dbo','orders')
+                  field: order_id
+          - name: product_id
+            description: "ID de pedido"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('src_sql_server_dbo','products')
+                  field: product_id
+          - name: quantity
+            description: "CANTIDAD"
+            tests:
+              - not_null
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: orders
+        columns:
+          - name: order_id
+            description: "ID de pedido"
+            tests:
+              - not_null
+              - unique
+              - relationships:
+                  to: source('src_sql_server_dbo','order_items')
+                  field: order_id 
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','events')
+                  field: order_id
+                  where: order_id <> null
+          - name: shipping_service
+            description: "EMPRESA DE ENVÍO"
+          - name: shipping_cost
+            description: "COSTE DE ENVÍO"
+          - name: address_id
+            description: "ID de envío"
+            tests:
+              - not_null 
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','addresses')
+                  field: address_id
+                  where: address_id <> null
+          - name: created_at
+            description: "FECHA PEDIDO"
+          - name: promo_id
+            description: "ID promoción"
+            test:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','promos')
+                  field: promo_id
+                  where: promo_id <> null
+          - name: estimated_delivery_at
+            description: "FECHA ESTIMADA DE ENTREGA"
+          - name: order_cost
+            description: " COSTE DEL PEDIDO"
+          - name: user_id
+            description: "ID de usuario"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('src_sql_server_dbo','users')
+                  field: user_id
+          - name: order_total
+            description: "COSTE TOTAL DEL PEDIDO"
+          - name: delivered_at
+            description: "FECHA ENTREGA"
+          - name: tracking_id
+            description: "IDENTIFICADOR"
+          - name: status
+            description: "ESTADO"
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: products
+        columns:
+          - name: product_id
+            description: "ID del producto"
+            tests:
+              - not_null
+              - unique
+          - name: price
+            description: "PRECIO"
+          - name: name
+            description: "NOMBRE"
+          - name: inventory
+            description: "INVENTARIO"
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: promos
+        columns:
+          - name: promo_id
+            description: "ID del pedido"
+            tests:
+              - not_null
+              - unique
+          - name: discount
+            description: "DESCUENTO"
+          - name: status
+            description: "ESTADO PROMO"
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: users
+        columns:
+          - name: user_id
+            description: "ID de usuario"
+            tests:
+              - not_null
+              - unique
+          - name: updated_at
+            description: "MODIFICACIÓN"
+          - name: address_id
+            description: "ID de dirección"
+            tests:
+              - not_null
+          - name: last_name
+            description: "APELLIDO"
+          - name: created_at
+            description: "FECHA CREACIÓN"
+          - name: phone_number
+            description: "NÚMERO TELEFONO"
+          - name: total_orders
+            description: "TOTAL PEDIDOA"
+          - name: first_name
+            description: "NOMBRE"
+          - name: email
+            description: "EMAIL"
+            tests:
+              - not_null
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+      - name: events
+        columns:
+          - name: event_id
+            description: "ID del evento"
+          - name: product_id
+            description: "ID del producto"
+            tests:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','products')
+                  field: product_id
+                  where: product_id <> null
+          - name: page_url
+            description: "WEB"
+          - name: event_type
+            description: "TIPO EVENTO"
+          - name: order_id
+            description: "ID del pedido"
+            tests:
+              - not_null
+              - dbt_utils.relationships_where:
+                  to: source('src_sql_server_dbo','orders')
+                  field: order_id
+                  where: order_id <> null
+          - name: session_id
+            description: "ID de la sesión"
+          - name: user_id
+            description: "ID de usuario"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('src_sql_server_dbo','users')
+                  field: user_id
+          - name: created_at
+            description: "FECHA CREACIÓN"
+          - name: _fivetran_deleted
+            description: "FIVETRAN BORRADO"
+          - name: _fivetran_synced
+            description: "FIVETRAN CARGA"
+
+
+            

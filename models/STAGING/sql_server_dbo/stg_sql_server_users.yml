@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_sql_server_users
+    description: "Tabla dimension USERS"
+    columns:
+      - name: user_id
+        description: "ID del usuario"
+
+      - name: id_direccion
+        description: "ID de la dirección"
+
+      - name: nombre
+        description: "Nombre del Usuario"
+
+      - name: fecha_creacion
+        description: "Fecha de creación del usuario"
+
+      - name: total_pedidos
+        description: "Total pedidos por el usuario"
+
+      - name: apellido
+        description: "Apellido del usuario"
+
+      - name: fecha_modificacion
+        description: "Fecha de modificación"
+
+      - name: numero_telefono
+        description: "Número de teléfono del usuario"
+
+      - name: correo_electronico
+        description: "Correo electrónico del usuario"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"

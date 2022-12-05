@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_sql_server_order_items
+    description: "Tabla dimension ORDER_ITEMS"
+    columns:
+      - name: order_id
+        description: "ID de Order"
+
+      - name: id_producto
+        description: "ID de Producto"
+
+      - name: cantidad
+        description: "Cantidad"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"

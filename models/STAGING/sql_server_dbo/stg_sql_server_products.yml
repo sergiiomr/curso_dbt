@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_sql_server_products
+    description: "Tabla dimension PRODUCTS"
+    columns:
+      - name: product_id
+        description: "ID del producto"
+
+      - name: precio
+        description: "Precio del producto"
+
+      - name: inventario
+        description: "Inventario"
+
+      - name: nombre
+        description: "Nombre del producto"
+
+      - name: date_load
+        description: "Carga de FIVETRAN"
